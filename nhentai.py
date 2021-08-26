@@ -107,8 +107,8 @@ def loadHentai(code):
     print("###############")
     print("# Hentai Info #")
     print("###############")
-    print("\n")
     print(hentai)
+
 
 
 if __name__ == "__main__":
