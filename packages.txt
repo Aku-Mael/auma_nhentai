@@ -1,0 +1,6 @@
+BeautifulSoup
+pip3 install bs4
+
+lxml
+pip3 install lxml
+
