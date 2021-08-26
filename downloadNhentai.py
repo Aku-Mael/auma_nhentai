@@ -10,16 +10,15 @@ from nhentai import Hentai
 
 HENTAI_PAGE = "https://nhentai.net/g/"
 HENTAI_PICTURES = "https://i.nhentai.net/galleries/"
+COVER_PAGE = "https://t.nhentai.net/galleries/"
 
 
 class DownloadHentai():
 
-    def __init__(self, code):
+    def __init__(self, hentai):
 
         # Hentai information
-        self.hentai = Hentai(code)
-        self.hentai.loadData()
-        self.hentai.analyzeData()
+        self.hentai = hentai
         self.mainURL = self.hentai.title + '/'
         
     def setUrl(self, url):
@@ -36,6 +35,8 @@ class DownloadHentai():
         for i in range(pages):
             num_page = str(i + 1)
             self.create_image(HENTAI_PICTURES + self.hentai.id + '/' + num_page, num_page)
+            
+        return True
 
     def create_image(self, pre_url, name):
         extensiones = [".jpg", ".png"]
@@ -55,24 +56,35 @@ class DownloadHentai():
 
         print("Image extension problem")
         return None
+    
+    def get_cover(self):
+        extensiones = [".jpg", ".png"]
 
+        for ext in extensiones:
+            url = COVER_PAGE + self.hentai.id + "/cover" + ext
+            print(url)
+            check = requests.get(url)
+
+            if check.status_code != 404:
+                data = urlopen(url).read()
+                file = BytesIO(data)
+                img = Image.open(file)
+                return img
+
+    def __str__(self):
+        string = str(self.hentai) + '\n'
+        string = string + 'URL: ' + self.mainURL
+        return string
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(sys.argv[0] + " [-u] [C:/location] code")
         exit()
-    elif len(sys.argv) > 2:
-        try:
-            int(sys.argv[3])
-        except:
-            print("Insert a code")
-            exit()
-            
-        hentai = DownloadHentai(sys.argv[3])
-        
-        if len(sys.argv) == 4:
-            if sys.argv[1] == "-u":
-                hentai.setUrl(sys.argv[2])
-                
+    else:
+        temp = Hentai(sys.argv[1])
+        temp.loadData()
+        temp.analyzeData()
+        hentai = DownloadHentai(temp)
         hentai.downloadHentai()
+
         

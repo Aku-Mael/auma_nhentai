@@ -31,8 +31,12 @@ class Hentai():
     # Download html required to extract the data
     def loadData(self):
         link = HENTAI_PAGE + self.code + "/"
-        html = requests.get(link)
-        self.data = BeautifulSoup(html.text, "lxml")
+        check = requests.get(link)
+        if check.status_code != 404:
+            self.data = BeautifulSoup(check.text, "lxml")
+            return True
+        else:
+            return False
         
     # Analyze the html to get the data
     def analyzeData(self):
