@@ -18,7 +18,7 @@ This class stores the information corresponding to the manga associated with a c
 ### DownloadHentai
 This class contains a Hentai and a url where to download it.
 ## Use
-- Consult information about a hentai
-python3 nhentai.py <code>
-- Download a hentai
-python3 downloadNhentai.py [-u] [url] <code>
+**Consult information about a hentai**
+python3 nhentai.py code
+**Download a hentai**
+python3 downloadNhentai.py [-u] [url] code
