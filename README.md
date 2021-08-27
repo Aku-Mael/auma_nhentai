@@ -1,9 +1,9 @@
 # NHentai API
 ## Description
 This is an API to interact with the web [NHentai] (https://nhentai.net) to know the information and download hentai through its code and using python3. It will show the following characteristics:
-+ Name
-+ Code
-+ ID
+- Name
+- Code
+- ID
 - Parodies
 - Characters
 - Tags
@@ -12,13 +12,21 @@ This is an API to interact with the web [NHentai] (https://nhentai.net) to know 
 - Languages
 - Categories
 - Pages
-## Classes
-### Hentai
-This class stores the information corresponding to the manga associated with a code.
-### DownloadHentai
-This class contains a Hentai and a url where to download it.
+
+## Required packages
+BeautifulSoup
+`pip3 install bs4`
+lxml
+`pip3 install lxml`
+tkinter
+`sudo apt-get install python3-tk`
+
 ## Use
-**Consult information about a hentai**
-python3 nhentai.py code
-**Download a hentai**
-python3 downloadNhentai.py [-u] [url] code
+Consult information about a hentai
+`python3 nhentai.py <code>`
+
+Download a hentai
+`python3 downloadNhentai.py <code>`
+    
+Use the graphical interface
+`python3 graphics.py`
