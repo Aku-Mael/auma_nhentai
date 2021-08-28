@@ -31,44 +31,48 @@ class Hentai():
 
     @property
     def id(self):
-        return self.id
+        return self._id
 
     @property
     def code(self):
-        return self.code
+        return self._code
 
     @property
     def title(self):
-        return self.title
-    
+        return self._title
+
+    @property
+    def pages(self):
+        return self._pages
+
     @property
     def parodies(self):
-        return self.parodies
-    
+        return self._parodies
+
     @property
     def characters(self):
-        return self.characters
+        return self._characters
 
     @property
     def tags(self):
-        return self.tags
+        return self._tags
 
     @property
     def artists(self):
-        return self.artists
+        return self._artists
 
     @property
     def groups(self):
-        return self.groups
+        return self._groups
 
     @property
     def languages(self):
-        return self.languages
+        return self._languages
 
     @property
     def categories(self):
-        return self.categories    
-    
+        return self._categories
+
     # Download html required to extract the data
     def loadData(self):
         link = HENTAI_PAGE + self._code + "/"
@@ -79,18 +83,18 @@ class Hentai():
             return
         except requests.Timeout:
             raise ConnectionErrorNHentai("Waiting time exceeded")
-            return        
-        
+            return
+
         if check.status_code == 404:
-            raise ConnectionErrorNHentai("Error al buscar el código")
+            raise ConnectionErrorNHentai("Error searching the code")
         else:
             self._data = BeautifulSoup(check.text, "lxml")
-        
+
     # Analyze the html to get the data
     def analyzeData(self):
         if not self._data:
             return False
-        
+
         self._title = self._data.title.string.replace(' » nhentai: hentai doujinshi and manga', '')
         tags = self._data.find(id='tags')
 
@@ -101,29 +105,28 @@ class Hentai():
                 elif tag.get_text().find('Characters') > 0:
                     self._characters.append(item.get_text())
                 elif tag.get_text().find('Tags') > 0:
-                    self._tags.append(item.get_text())                
+                    self._tags.append(item.get_text())
                 elif tag.get_text().find('Artists') > 0:
-                    self._artists.append(item.get_text())                    
+                    self._artists.append(item.get_text())
                 elif tag.get_text().find('Groups') > 0:
                     self._groups.append(item.get_text())
                 elif tag.get_text().find('Languages') > 0:
-                    self._languages.append(item.get_text()) 
+                    self._languages.append(item.get_text())
                 elif tag.get_text().find('Categories') > 0:
                     self._categories.append(item.get_text())
                 elif tag.get_text().find('Pages') > 0:
                     self._pages = item.get_text()
-                    
+
         url = self._data.find(id='cover').find_all('img')[-1].get('src')
         self._id = url.replace(COVER_PAGE, '').replace('/cover.', '').replace('jpg', '').replace('png', '')
         return True
-    
-    
+
     def __str__(self):
         string = "Code: " + self._code
-        
+
         if self._id:
             string = string + "\nID: " + str(self._id)
-        if self._title :
+        if self._title:
             string = string + "\nTitle: " + self._title
         if self._pages:
             string = string + "\nPages: " + str(self._pages)
@@ -141,7 +144,7 @@ class Hentai():
             string = string + "\nLanguages: " + str(self._languages)
         if self._categories:
             string = string + "\nCategories: " + str(self._categories)
-        
+
         return string
 
 
@@ -152,15 +155,13 @@ class ConnectionErrorNHentai(Exception):
         super().__init__(self.info)
 
 
-
-
 def loadHentai(code):
     try:
         int(code)
-    except:
+    except ValueError:
         print("Write a code")
         return
-        
+
     hentai = Hentai(code)
     try:
         hentai.loadData()
@@ -172,7 +173,6 @@ def loadHentai(code):
     print("# Hentai Info #")
     print("###############")
     print(hentai)
-
 
 
 if __name__ == "__main__":
